@@ -1,7 +1,8 @@
 <template>
     <div class="animal-crossing ">
+      
       <div class="button-container">
-        <div class="img-button" v-for="animal in animals" :key="animal.japaneseName" @click="huntingRecord(animal)">
+        <div class="img-button" v-for="animal in animals" :key="animal.japaneseName" @click="addFirestore(animal)">
           <img class="animal-img" :src="animal.imagePath" :alt="animal.japaneseName+animal.gender" >
           <p class="animal-japanese-name">{{ animal.japaneseName }} {{ animal.gender }}</p>
           <!--<p>{{ animal.englishName }}</p>-->
@@ -11,10 +12,9 @@
 </template>
 
 <script lang="ts">
+//import component from '*.vue';
 import { Options, Vue } from 'vue-class-component';
-
-
-
+import firestore from '../firebase'
 
     interface Animal {
         japaneseName: string;
@@ -22,55 +22,83 @@ import { Options, Vue } from 'vue-class-component';
         gender: string;
         imagePath: string;
     }
-
     @Options({
+      methods:{
+        addFirestore(animal: Animal){
+
+          firestore.collection('hunting-record').add(
+            {
+              'huntingTime':new Date(),
+              'animalName':animal.japaneseName,
+              'gender':animal.gender
+            }
+          ).then(()=>{
+            alert(`おめでとうございます!!\n${animal.japaneseName} をハントしました。`)
+          }).catch((error)=>{
+            alert(`記録に失敗しました。\n${error}`)
+          })
+        }
+      }
     })
     export default class AnimalCrossing extends Vue {
         private animals: Animal[]=
         [
-{ japaneseName:'アカギツネ', englishName:'Red fox', gender:'♂', imagePath: '' },
-{ japaneseName:'アカギツネ', englishName:'Red fox', gender:'♀', imagePath:'' },
-{ japaneseName:'アカシカ', englishName:'Red deer', gender:'♂', imagePath:'' },
-{ japaneseName:'アカシカ', englishName:'Red deer', gender:'♀', imagePath:'' },
-{ japaneseName:'アメリカアカシカ', englishName:'American red deer', gender:'♂', imagePath:'' },
-{ japaneseName:'アメリカアカシカ', englishName:'American red deer', gender:'♀', imagePath:'' },
-{ japaneseName:'アメリカグマ', englishName:'American black bear', gender:'♂', imagePath:'' },
-{ japaneseName:'アメリカグマ', englishName:'American black bear', gender:'♀', imagePath:'' },
-{ japaneseName:'オグロジカ', englishName:'Black-tailed deer', gender:'♂', imagePath:'' },
-{ japaneseName:'オグロジカ', englishName:'Black-tailed deer', gender:'♀', imagePath:'' },
-{ japaneseName:'オジロジカ', englishName:'White-tailed deer', gender:'♂', imagePath:'' },
-{ japaneseName:'オジロジカ', englishName:'White-tailed deer', gender:'♀', imagePath:'' },
-{ japaneseName:'オジロジャックウサギ', englishName:'White-tailed Jackrabbit', gender:'♂', imagePath:'' },
-{ japaneseName:'オジロジャックウサギ', englishName:'White-tailed Jackrabbit', gender:'♀', imagePath:'' },
-{ japaneseName:'コヨーテ', englishName:'Coyote', gender:'♂', imagePath:'' },
-{ japaneseName:'コヨーテ', englishName:'Coyote', gender:'♀', imagePath:'' },
+{ japaneseName:'アカギツネ', englishName:'Red fox', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'アカギツネ', englishName:'Red fox', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'アカシカ', englishName:'Red deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'アカシカ', englishName:'Red deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'アメリカアカシカ', englishName:'American red deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'アメリカアカシカ', englishName:'American red deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'アメリカグマ', englishName:'American black bear', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'アメリカグマ', englishName:'American black bear', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'オグロジカ', englishName:'Black-tailed deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'オグロジカ', englishName:'Black-tailed deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'オジロジカ', englishName:'White-tailed deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'オジロジカ', englishName:'White-tailed deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'オジロジャックウサギ', englishName:'White-tailed Jackrabbit', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'オジロジャックウサギ', englishName:'White-tailed Jackrabbit', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'コヨーテ', englishName:'Coyote', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'コヨーテ', englishName:'Coyote', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'シベリアジャコウジカ', englishName:'Siberian musk deer', gender:'♂', imagePath:require('@/assets/animalImg/シベリアジャコウジカ♂.jpg') },
 { japaneseName:'シベリアジャコウジカ', englishName:'Siberian musk deer', gender:'♀', imagePath:require('@/assets/animalImg/シベリアジャコウジカ♀.jpg') },
 { japaneseName:'ダマジカ', englishName:'Fallow deer', gender:'♂', imagePath:require('@/assets/animalImg/ダマジカ♂.jpg') },
-{ japaneseName:'ダマジカ', englishName:'Fallow deer', gender:'♀', imagePath:'' },
+{ japaneseName:'ダマジカ', englishName:'Fallow deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'ノロジカ', englishName:'Roe deer', gender:'♂', imagePath:require('@/assets/animalImg/ノロジカ♂.jpg') },
-{ japaneseName:'ノロジカ', englishName:'Roe deer', gender:'♀', imagePath:'' },
+{ japaneseName:'ノロジカ', englishName:'Roe deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'ヘラジカ', englishName:'The elk', gender:'♂', imagePath:require('@/assets/animalImg/ヘラジカ♂.jpg') },
-{ japaneseName:'ヘラジカ', englishName:'The elk', gender:'♀', imagePath:'' },
+{ japaneseName:'ヘラジカ', englishName:'The elk', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'トナカイ', englishName:'reindeer', gender:'♂', imagePath:require('@/assets/animalImg/トナカイ♂.jpg') },
-{ japaneseName:'トナカイ', englishName:'reindeer', gender:'♀', imagePath:'' },
+{ japaneseName:'トナカイ', englishName:'reindeer', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'ヒグマ', englishName:'Brown bear', gender:'♂', imagePath:require('@/assets/animalImg/ヒグマ♂.jpg') },
-{ japaneseName:'ヒグマ', englishName:'Brown bear', gender:'♀', imagePath:'' },
+{ japaneseName:'ヒグマ', englishName:'Brown bear', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'イノシシ', englishName:'boar', gender:'♂', imagePath:require('@/assets/animalImg/イノシシ♂.jpg') },
 { japaneseName:'イノシシ', englishName:'boar', gender:'♀', imagePath:require('@/assets/animalImg/イノシシ♀.jpg') },
 { japaneseName:'オオヤマネコ', englishName:'Lynx', gender:'♂', imagePath:require('@/assets/animalImg/オオヤマネコ♂.jpg') },
-{ japaneseName:'オオヤマネコ', englishName:'Lynx', gender:'♀', imagePath:'' },
-{ japaneseName:'カリブー', englishName:'Caribou', gender:'♂', imagePath:'' },
+{ japaneseName:'オオヤマネコ', englishName:'Lynx', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'カリブー', englishName:'Caribou', gender:'♂', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'カリブー', englishName:'Caribou', gender:'♀', imagePath:require('@/assets/animalImg/カリブー♀.jpg') },
-{ japaneseName:'ヘイゲンバイソン', englishName:'Hey Gen bison', gender:'♂', imagePath:'' },
-{ japaneseName:'ヘイゲンバイソン', englishName:'Hey Gen bison', gender:'♀', imagePath:'' },
-{ japaneseName:'ハイイロオオカミ', englishName:'Gray wolf', gender:'♂', imagePath:'' },
-{ japaneseName:'ハイイロオオカミ', englishName:'Gray wolf', gender:'♀', imagePath:'' },
+{ japaneseName:'ヘイゲンバイソン', englishName:'Hey Gen bison', gender:'♂', imagePath:require('@/assets/animalImg/ヘイゲンバイソン♂.jpg') },
+{ japaneseName:'ヘイゲンバイソン', englishName:'Hey Gen bison', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'ハイイロオオカミ', englishName:'Gray wolf', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'ハイイロオオカミ', englishName:'Gray wolf', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'プロングホーン', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'プロングホーン', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'ロッキーマウンテンエルク', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'ロッキーマウンテンエルク', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'七面鳥', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'七面鳥', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
         ]
     }
 </script>
 
 <style lang="scss" scoped>
+$sp: 834px; // スマホ用のブレイクポイント
+@mixin sp {
+    @media (max-width: ($sp)) {
+        @content;
+    }
+}
+
 body{
   margin: 0;
   
@@ -93,18 +121,35 @@ body{
   position: relative;
 
   width: 25vw;
+  height: 25vw;
   background-color: white;
   
   margin: 2vw;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include sp {
+    width: 35vw;
+    height: 35vw;
+
+    margin: 1.5vw 5vw;
+  }
 }
 
 .animal-japanese-name{
   position: absolute;
   color: black;
   background-color: gray;
-  opacity:50%;
+  
   bottom:0;
   left: 0;
+  font-size: 1rem;
+
+  @include sp {
+    font-size: 10px;
+  }
 }
 
 .animal-img{
