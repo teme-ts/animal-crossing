@@ -105,7 +105,8 @@ body{
 }
 
 .button-container{
-    background-image: url("./../assets/backgrounds/tiga2.jpg");
+  background-image: url("./../assets/backgrounds/tiga2.jpg");
+  background-attachment: fixed;
   display: flex;
   flex-wrap: wrap;
   width: 100vw;
@@ -134,7 +135,7 @@ body{
     width: 35vw;
     height: 35vw;
 
-    margin: 1.5vw 5vw;
+    margin: 2.5vw 2.5vw;
   }
 }
 
@@ -147,6 +148,9 @@ body{
   left: 0;
   font-size: 1rem;
 
+  margin-bottom: 1em;
+
+  opacity: 0.5;
   @include sp {
     font-size: 10px;
   }
