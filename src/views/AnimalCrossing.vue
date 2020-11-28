@@ -52,7 +52,7 @@ import firestore from '../firebase'
 { japaneseName:'アメリカグマ', englishName:'American black bear', gender:'♂', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'アメリカグマ', englishName:'American black bear', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'オグロジカ', englishName:'Black-tailed deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'オグロジカ', englishName:'Black-tailed deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'オグロジカ', englishName:'Black-tailed deer', gender:'♀', imagePath:require('@/assets/animalImg/オグロジカ♀.jpg') },
 { japaneseName:'オジロジカ', englishName:'White-tailed deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'オジロジカ', englishName:'White-tailed deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'オジロジャックウサギ', englishName:'White-tailed Jackrabbit', gender:'♂', imagePath:require('@/assets/title_full.png') },
@@ -62,7 +62,7 @@ import firestore from '../firebase'
 { japaneseName:'シベリアジャコウジカ', englishName:'Siberian musk deer', gender:'♂', imagePath:require('@/assets/animalImg/シベリアジャコウジカ♂.jpg') },
 { japaneseName:'シベリアジャコウジカ', englishName:'Siberian musk deer', gender:'♀', imagePath:require('@/assets/animalImg/シベリアジャコウジカ♀.jpg') },
 { japaneseName:'ダマジカ', englishName:'Fallow deer', gender:'♂', imagePath:require('@/assets/animalImg/ダマジカ♂.jpg') },
-{ japaneseName:'ダマジカ', englishName:'Fallow deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'ダマジカ', englishName:'Fallow deer', gender:'♀', imagePath:require('@/assets/animalImg/ダマジカ♀.jpg') },
 { japaneseName:'ノロジカ', englishName:'Roe deer', gender:'♂', imagePath:require('@/assets/animalImg/ノロジカ♂.jpg') },
 { japaneseName:'ノロジカ', englishName:'Roe deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'ヘラジカ', englishName:'The elk', gender:'♂', imagePath:require('@/assets/animalImg/ヘラジカ♂.jpg') },
@@ -75,18 +75,22 @@ import firestore from '../firebase'
 { japaneseName:'イノシシ', englishName:'boar', gender:'♀', imagePath:require('@/assets/animalImg/イノシシ♀.jpg') },
 { japaneseName:'オオヤマネコ', englishName:'Lynx', gender:'♂', imagePath:require('@/assets/animalImg/オオヤマネコ♂.jpg') },
 { japaneseName:'オオヤマネコ', englishName:'Lynx', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'カリブー', englishName:'Caribou', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'カリブー', englishName:'Caribou', gender:'♂', imagePath:require('@/assets/animalImg/カリブー♂.jpg') },
 { japaneseName:'カリブー', englishName:'Caribou', gender:'♀', imagePath:require('@/assets/animalImg/カリブー♀.jpg') },
 { japaneseName:'ヘイゲンバイソン', englishName:'Hey Gen bison', gender:'♂', imagePath:require('@/assets/animalImg/ヘイゲンバイソン♂.jpg') },
 { japaneseName:'ヘイゲンバイソン', englishName:'Hey Gen bison', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'ハイイロオオカミ', englishName:'Gray wolf', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'ハイイロオオカミ', englishName:'Gray wolf', gender:'♂', imagePath:require('@/assets/animalImg/ハイイロオオカミ♂.jpg') },
 { japaneseName:'ハイイロオオカミ', englishName:'Gray wolf', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'プロングホーン', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'プロングホーン', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'ロッキーマウンテンエルク', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'プロングホーン', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/プロングホーン♂.jpg') },
+{ japaneseName:'プロングホーン', englishName:'', gender:'♀', imagePath:require('@/assets/animalImg/プロングホーン♀.jpg') },
+{ japaneseName:'ロッキーマウンテンエルク', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/ロッキーマウンテンエルク♂.jpg') },
 { japaneseName:'ロッキーマウンテンエルク', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'七面鳥', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'七面鳥', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'七面鳥', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/七面鳥♂.jpg') },
+{ japaneseName:'七面鳥', englishName:'', gender:'♀', imagePath:require('@/assets/animalImg/七面鳥♀.jpg') },
+{ japaneseName:'ビッグホーン', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/ビッグホーン♂.jpg') },
+{ japaneseName:'ビッグホーン', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'ミュールジカ', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/ミュールジカ♂.jpg') },
+{ japaneseName:'ミュールジカ', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
         ]
     }
 </script>
@@ -105,8 +109,7 @@ body{
 }
 
 .button-container{
-  background-image: url("./../assets/backgrounds/tiga2.jpg");
-  background-attachment: fixed;
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   width: 100vw;
@@ -116,6 +119,19 @@ body{
   left: 0;
   right: 0;
   margin: auto;
+}
+
+.button-container::before {
+  content: '';
+  background-image: url('./../assets/backgrounds/tiga2.jpg');/* 画像（ここにfixedは入れない） */
+  background-size: cover;/* cover指定できる */
+  display: block;
+  position: fixed;/* 擬似要素ごと固定 */
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;/* 横幅いっぱい */
+  height: 100vh;/* 縦幅いっぱい */
 }
 
 .img-button{
