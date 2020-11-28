@@ -5,6 +5,7 @@
 
 # build folder
 /dist
+firebase_config.ts
 
 # User-specific files
 *.rsuser
