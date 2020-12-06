@@ -93,6 +93,8 @@ import {firestore,storage} from '../firebase'
 { japaneseName:'ミュールジカ', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'ピューマ', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'ピューマ', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'シロイワヤギ', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'シロイワヤギ', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
         ]
     }
 </script>
