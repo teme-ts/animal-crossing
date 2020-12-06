@@ -14,7 +14,7 @@
 <script lang="ts">
 //import component from '*.vue';
 import { Options, Vue } from 'vue-class-component';
-import firestore from '../firebase'
+import {firestore,storage} from '../firebase'
 
     interface Animal {
         japaneseName: string;
@@ -91,6 +91,8 @@ import firestore from '../firebase'
 { japaneseName:'ビッグホーン', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'ミュールジカ', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/ミュールジカ♂.jpg') },
 { japaneseName:'ミュールジカ', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'ピューマ', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
+{ japaneseName:'ピューマ', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
         ]
     }
 </script>
@@ -157,7 +159,7 @@ body{
 
 .animal-japanese-name{
   position: absolute;
-  color: black;
+  color: white;
   background-color: gray;
   
   bottom:0;
