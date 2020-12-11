@@ -1,13 +1,35 @@
 <template>
-    <div class="animal-crossing ">
-      
+    <div class="animal-crossing ">      
+      <div class="reserve" v-for="reserve in storeAnimals" :key="reserve.japaneseName">
+        <p class="reserve-">{{reserve.japaneseName}}</p>
+        <div class="button-container">
+          <div class="animal-pair-content" v-for="animal in reserve.animals" :key="animal.japaneseName">
+            <div class="img-button" @click="addFirestore(reserve.japaneseName,animal.japaneseName,'♂')">
+              <img  class="animal-img" :src="animal.imgURL.male" alt="">
+              <p class="animal-japanese-name">{{animal.japaneseName}}♂</p>
+            </div>
+            <div class="img-button" @click="addFirestore(reserve.japaneseName,animal.japaneseName,'♀')">
+              <img  class="animal-img" :src="animal.imgURL.female" alt="">
+              <p class="animal-japanese-name">{{animal.japaneseName}}♀</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--{{storeAnimals}}-->
+      <!--<div>
+        <button @click="getStroage()">テストボタン</button>
+        <img :src="testStorage" alt="">
+        {{testStorage}}
+      </div>-->
+      <!--
       <div class="button-container">
         <div class="img-button" v-for="animal in animals" :key="animal.japaneseName" @click="addFirestore(animal)">
           <img class="animal-img" :src="animal.imagePath" :alt="animal.japaneseName+animal.gender" >
           <p class="animal-japanese-name">{{ animal.japaneseName }} {{ animal.gender }}</p>
-          <!--<p>{{ animal.englishName }}</p>-->
+          <p>{{ animal.englishName }}</p>
         </div>
       </div>
+      -->
     </div>
 </template>
 
@@ -15,6 +37,7 @@
 //import component from '*.vue';
 import { Options, Vue } from 'vue-class-component';
 import {firestore,storage} from '../firebase'
+import moment from 'moment'
 
     interface Animal {
         japaneseName: string;
@@ -24,23 +47,74 @@ import {firestore,storage} from '../firebase'
     }
     @Options({
       methods:{
-        addFirestore(animal: Animal){
-
-          firestore.collection('hunting-record').add(
+        addFirestore(reserve: string,animalName: string,gender: string){
+          const id = `${moment(new Date()).format('YYYYMMDDHHmmss')}${animalName}${gender}`;
+          firestore.collection('hunting-record').doc(id).set(
             {
+              'reserge': reserve,
               'huntingTime':new Date(),
-              'animalName':animal.japaneseName,
-              'gender':animal.gender
+              'animalName':animalName,
+              'gender':gender,
+              'movieNum':'',
             }
           ).then(()=>{
-            alert(`おめでとうございます!!\n${animal.japaneseName} をハントしました。`)
+            alert(`おめでとうございます!!\n${animalName}${gender} をハントしました。`)
           }).catch((error)=>{
             alert(`記録に失敗しました。\n${error}`)
           })
-        }
+        },
+        
+        
       }
     })
     export default class AnimalCrossing extends Vue {
+      private async getAnimals(){
+        const animals: any[] = [];
+        await firestore.collection('animals').get().then(async doc => {
+          const reserve: any[]=[]
+          
+          await doc.forEach(async snapShot=>{
+            const animalPerReserve: any[] = []
+            await snapShot.ref.collection('animals').get().then(doc => {
+              doc.forEach(snapShot=>{
+                //console.log(snapShot.data())
+                const animalData = snapShot.data()
+                animalPerReserve.push(animalData)
+              })
+            })
+            //console.log(animalPerReserve)
+            const reserveData = snapShot.data()
+            reserve.push({
+              japaneseName: reserveData.japaneseName,
+              englishName: reserveData.englishName,
+              animals: animalPerReserve,
+            })
+            //console.log(`保護区別：${reserve}`)
+          })
+          animals.push(reserve)
+          alert(`取得しました\n${animals}`)
+          
+        })
+        alert(animals)
+        return animals
+      }
+      /*private testAnimals: any = firestore.collectionGroup('animals').get().then(doc => {
+        alert(doc.docs)
+      })*/
+      /*private storeAnimals: any = this.getAnimals().then(value=>{
+        this.testAnimals = value
+      })*/
+
+
+        /*private testStorage = this.getStorage();
+        private getStorage(){
+          const storageRef = storage.ref()
+          alert(storage.refFromURL(storageRef.child('animalImages/イノシシ♀.jpg').toString()).fullPath)
+          return storageRef.child('animalImages/イノシシ♀.jpg').getDownloadURL().then((value)=>{
+            this.testStorage = value 
+          })
+        }*/
+        
         private animals: Animal[]=
         [
 { japaneseName:'アカギツネ', englishName:'Red fox', gender:'♂', imagePath:require('@/assets/title_full.png') },
@@ -96,6 +170,29 @@ import {firestore,storage} from '../firebase'
 { japaneseName:'シロイワヤギ', englishName:'', gender:'♂', imagePath:require('@/assets/title_full.png') },
 { japaneseName:'シロイワヤギ', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
         ]
+      
+      private storeAnimals: any[] =[]
+      created(){
+        firestore.collection('animals').get().then(async doc => {
+          //this.storeAnimals = doc.docs
+          
+          await doc.forEach(async snapShot=>{
+            const animalPerReserve: any[] =[]
+            await snapShot.ref.collection('animals').get().then(async doc=>{
+              
+              await doc.forEach(snapShot => {
+                animalPerReserve.push(snapShot.data())
+              })
+
+            })
+
+            this.storeAnimals.push({...snapShot.data(),animals:animalPerReserve})
+            //console.log(value.data())
+          })
+          
+        })
+        console.log(this.storeAnimals)
+      }
     }
 </script>
 
@@ -138,6 +235,10 @@ body{
   height: 100vh;/* 縦幅いっぱい */
 }
 
+.animal-pair-content{
+  display: flex;
+}
+
 .img-button{
   position: relative;
 
@@ -162,7 +263,9 @@ body{
 .animal-japanese-name{
   position: absolute;
   color: white;
-  background-color: gray;
+  background-color: rgba(0,0,0,0.5);
+
+  line-height: 1.5em;
   
   bottom:0;
   left: 0;
@@ -170,7 +273,7 @@ body{
 
   margin-bottom: 1em;
 
-  opacity: 0.5;
+  /*opacity: 0.5;*/
   @include sp {
     font-size: 10px;
   }
