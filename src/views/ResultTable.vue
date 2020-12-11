@@ -19,7 +19,7 @@
                             class="hunting-movie-num"
                             v-model="huntingRecord.movieNum"
                             placeholder="動画作成順"
-                            @change="addFirestore(huntingRecord.recordId,huntingRecord.movieNum)"
+                            @change="addFirestore(huntingRecord,huntingRecord.movieNum)"
                         >
                         <!--<button @click="addFirestore(huntingRecord.recordId,huntingRecord.movieNum)">動画順を記録する</button>-->
                     </td>
@@ -55,15 +55,16 @@ import moment from 'moment'
         }
     })
     export default class ResultTable extends Vue {
-        addFirestore(id: string,movieNum: string){
+        addFirestore(huntingRecord: HuntingRecord,movieNum: string){
             let recordMovieNum: string = movieNum
             if(movieNum === undefined){
                 recordMovieNum = ''
             }
-                firestore.collection('hunting-record').doc(id).set(
+            alert(huntingRecord.recordId)
+                firestore.collection('hunting-record').doc(huntingRecord.recordId).set(
                     {
                         movieNum:recordMovieNum,
-                    }
+                    }, { merge: true }
                 ).then(()=>{
                     alert(`記録しました。`)
                 }).catch((error)=>{
