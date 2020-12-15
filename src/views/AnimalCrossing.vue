@@ -1,20 +1,28 @@
 <template>
-    <div class="animal-crossing ">
-      
-      <div class="button-container">
-        <div class="img-button" v-for="animal in animals" :key="animal.japaneseName" @click="addFirestore(animal)">
-          <img class="animal-img" :src="animal.imagePath" :alt="animal.japaneseName+animal.gender" >
-          <p class="animal-japanese-name">{{ animal.japaneseName }} {{ animal.gender }}</p>
-          <!--<p>{{ animal.englishName }}</p>-->
+    <div class="animal-crossing ">      
+      <div class="reserve" v-for="reserve in animals" :key="reserve.japaneseName">
+        <p class="reserve-">{{reserve.japaneseName}}</p>
+        <div class="button-container">
+          <div class="animal-pair-content" v-for="animal in reserve.animals" :key="animal.japaneseName">
+            <div class="img-button" @click="addFirestore(reserve.japaneseName,animal.japaneseName,'♂')">
+              <img  class="animal-img" :src="animal.imgURL.male" alt="">
+              <p class="animal-japanese-name">{{animal.japaneseName}}♂</p>
+            </div>
+            <div class="img-button" @click="addFirestore(reserve.japaneseName,animal.japaneseName,'♀')">
+              <img  class="animal-img" :src="animal.imgURL.female" alt="">
+              <p class="animal-japanese-name">{{animal.japaneseName}}♀</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" scoped>
 //import component from '*.vue';
 import { Options, Vue } from 'vue-class-component';
-import firestore from '../firebase'
+import {firestore,storage} from '../firebase'
+import moment from 'moment'
 
     interface Animal {
         japaneseName: string;
@@ -24,74 +32,49 @@ import firestore from '../firebase'
     }
     @Options({
       methods:{
-        addFirestore(animal: Animal){
-
-          firestore.collection('hunting-record').add(
+        addFirestore(reserve: string,animalName: string,gender: string){
+          const id = `${moment(new Date()).format('YYYYMMDDHHmmss')}${animalName}${gender}`;
+          firestore.collection('hunting-record').doc(id).set(
             {
+              'reserge': reserve,
               'huntingTime':new Date(),
-              'animalName':animal.japaneseName,
-              'gender':animal.gender
+              'animalName':animalName,
+              'gender':gender,
+              'movieNum':'',
             }
           ).then(()=>{
-            alert(`おめでとうございます!!\n${animal.japaneseName} をハントしました。`)
+            alert(`おめでとうございます!!\n${animalName}${gender} をハントしました。`)
           }).catch((error)=>{
             alert(`記録に失敗しました。\n${error}`)
           })
-        }
+        },
+        
+        
       }
     })
-    export default class AnimalCrossing extends Vue {
-        private animals: Animal[]=
-        [
-{ japaneseName:'アカギツネ', englishName:'Red fox', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'アカギツネ', englishName:'Red fox', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'アカシカ', englishName:'Red deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'アカシカ', englishName:'Red deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'アメリカアカシカ', englishName:'American red deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'アメリカアカシカ', englishName:'American red deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'アメリカグマ', englishName:'American black bear', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'アメリカグマ', englishName:'American black bear', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'オグロジカ', englishName:'Black-tailed deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'オグロジカ', englishName:'Black-tailed deer', gender:'♀', imagePath:require('@/assets/animalImg/オグロジカ♀.jpg') },
-{ japaneseName:'オジロジカ', englishName:'White-tailed deer', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'オジロジカ', englishName:'White-tailed deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'オジロジャックウサギ', englishName:'White-tailed Jackrabbit', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'オジロジャックウサギ', englishName:'White-tailed Jackrabbit', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'コヨーテ', englishName:'Coyote', gender:'♂', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'コヨーテ', englishName:'Coyote', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'シベリアジャコウジカ', englishName:'Siberian musk deer', gender:'♂', imagePath:require('@/assets/animalImg/シベリアジャコウジカ♂.jpg') },
-{ japaneseName:'シベリアジャコウジカ', englishName:'Siberian musk deer', gender:'♀', imagePath:require('@/assets/animalImg/シベリアジャコウジカ♀.jpg') },
-{ japaneseName:'ダマジカ', englishName:'Fallow deer', gender:'♂', imagePath:require('@/assets/animalImg/ダマジカ♂.jpg') },
-{ japaneseName:'ダマジカ', englishName:'Fallow deer', gender:'♀', imagePath:require('@/assets/animalImg/ダマジカ♀.jpg') },
-{ japaneseName:'ノロジカ', englishName:'Roe deer', gender:'♂', imagePath:require('@/assets/animalImg/ノロジカ♂.jpg') },
-{ japaneseName:'ノロジカ', englishName:'Roe deer', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'ヘラジカ', englishName:'The elk', gender:'♂', imagePath:require('@/assets/animalImg/ヘラジカ♂.jpg') },
-{ japaneseName:'ヘラジカ', englishName:'The elk', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'トナカイ', englishName:'reindeer', gender:'♂', imagePath:require('@/assets/animalImg/トナカイ♂.jpg') },
-{ japaneseName:'トナカイ', englishName:'reindeer', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'ヒグマ', englishName:'Brown bear', gender:'♂', imagePath:require('@/assets/animalImg/ヒグマ♂.jpg') },
-{ japaneseName:'ヒグマ', englishName:'Brown bear', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'イノシシ', englishName:'boar', gender:'♂', imagePath:require('@/assets/animalImg/イノシシ♂.jpg') },
-{ japaneseName:'イノシシ', englishName:'boar', gender:'♀', imagePath:require('@/assets/animalImg/イノシシ♀.jpg') },
-{ japaneseName:'オオヤマネコ', englishName:'Lynx', gender:'♂', imagePath:require('@/assets/animalImg/オオヤマネコ♂.jpg') },
-{ japaneseName:'オオヤマネコ', englishName:'Lynx', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'カリブー', englishName:'Caribou', gender:'♂', imagePath:require('@/assets/animalImg/カリブー♂.jpg') },
-{ japaneseName:'カリブー', englishName:'Caribou', gender:'♀', imagePath:require('@/assets/animalImg/カリブー♀.jpg') },
-{ japaneseName:'ヘイゲンバイソン', englishName:'Hey Gen bison', gender:'♂', imagePath:require('@/assets/animalImg/ヘイゲンバイソン♂.jpg') },
-{ japaneseName:'ヘイゲンバイソン', englishName:'Hey Gen bison', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'ハイイロオオカミ', englishName:'Gray wolf', gender:'♂', imagePath:require('@/assets/animalImg/ハイイロオオカミ♂.jpg') },
-{ japaneseName:'ハイイロオオカミ', englishName:'Gray wolf', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'プロングホーン', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/プロングホーン♂.jpg') },
-{ japaneseName:'プロングホーン', englishName:'', gender:'♀', imagePath:require('@/assets/animalImg/プロングホーン♀.jpg') },
-{ japaneseName:'ロッキーマウンテンエルク', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/ロッキーマウンテンエルク♂.jpg') },
-{ japaneseName:'ロッキーマウンテンエルク', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'七面鳥', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/七面鳥♂.jpg') },
-{ japaneseName:'七面鳥', englishName:'', gender:'♀', imagePath:require('@/assets/animalImg/七面鳥♀.jpg') },
-{ japaneseName:'ビッグホーン', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/ビッグホーン♂.jpg') },
-{ japaneseName:'ビッグホーン', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
-{ japaneseName:'ミュールジカ', englishName:'', gender:'♂', imagePath:require('@/assets/animalImg/ミュールジカ♂.jpg') },
-{ japaneseName:'ミュールジカ', englishName:'', gender:'♀', imagePath:require('@/assets/title_full.png') },
-        ]
+    export default class AnimalCrossing extends Vue {     
+      private animals: any[] =[]
+      created(){
+        firestore.collection('animals').get().then(async doc => {
+          //this.animals = doc.docs
+          
+          await doc.forEach(async snapShot=>{
+            const animalPerReserve: any[] =[]
+            await snapShot.ref.collection('animals').get().then(async doc=>{
+              
+              await doc.forEach(snapShot => {
+                animalPerReserve.push(snapShot.data())
+              })
+
+            })
+
+            this.animals.push({...snapShot.data(),animals:animalPerReserve})
+            //console.log(value.data())
+          })
+          
+        })
+        console.log(this.animals)
+      }
     }
 </script>
 
@@ -134,6 +117,10 @@ body{
   height: 100vh;/* 縦幅いっぱい */
 }
 
+.animal-pair-content{
+  display: flex;
+}
+
 .img-button{
   position: relative;
 
@@ -157,8 +144,10 @@ body{
 
 .animal-japanese-name{
   position: absolute;
-  color: black;
-  background-color: gray;
+  color: white;
+  background-color: rgba(0,0,0,0.5);
+
+  line-height: 1.5em;
   
   bottom:0;
   left: 0;
@@ -166,7 +155,7 @@ body{
 
   margin-bottom: 1em;
 
-  opacity: 0.5;
+  /*opacity: 0.5;*/
   @include sp {
     font-size: 10px;
   }
